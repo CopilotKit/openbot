@@ -8,6 +8,19 @@ Newest first. `Unreleased` is what is on `main` and not yet tagged.
 
 ## Unreleased
 
+### Opening a new chat no longer logs a server error
+
+A thread id is minted before the thread exists — the platform creates it on the first run — so reading
+history on a brand-new conversation asks about a thread nothing has heard of yet. The platform answered
+404, the runtime reported that as `500 Failed to fetch thread messages`, and every new chat left one in
+the log with a stack trace behind it. Nothing was visibly broken, because the browser only reads a
+history it got a 200 for; what was missing was any way to tell a thread that does not exist yet from a
+history store that is down.
+
+A thread the platform does not have now reads as having no messages. A 404 and only a 404: a 500 stays
+a 500, because an outage answered with an empty history would tell the browser the conversation is gone
+and invite somebody to start it over.
+
 ## 0.0.4
 
 ### A click citing a ref this deployment cannot resolve is refused
